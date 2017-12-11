@@ -34,6 +34,8 @@ class Event extends React.Component {
       backgroundColor: this.props.color,
     };
 
+    console.log(this.props.startInterval);
+
     return (
       <div
         className="timetable-schedules-room-event"

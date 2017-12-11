@@ -1,5 +1,6 @@
 import React from 'react';
 import Event from './event';
+import { HALF_HOUR, formatAMPM } from './timeUtils';
 
 class Room extends React.Component {
   state = {
@@ -10,26 +11,24 @@ class Room extends React.Component {
   }
 
   toggleEvent = (event, time) => {
-    const eventExists = this.state.events.find(event => event.startTime === time);
     const element = event.target;
-    if (!eventExists) {
-      if (this.state.editEvent) {
-        const newCoords = this.state.editEvent.coords.concat([element.offsetLeft]).sort((a, b) => a - b);
-        const newEvent = Object.assign({}, this.state.editEvent, { finishTime: time, coords: newCoords });
-        this.setState({ 
-          events: this.state.events.concat([newEvent]),
-          editEvent: undefined,
-          hoverTime: undefined,
-        });
-      } else {
-        const newEvent = {
-          id: `${this.props.roomId}-event-${new Date().getTime()}`,
-          startTime: time,
-          coords: [ element.offsetLeft ],
-          width: element.offsetWidth,
-        };
-        this.setState({ editEvent: newEvent });
-      }
+    if (this.state.editEvent) {
+      const newCoords = this.state.editEvent.coords.concat([element.offsetLeft]).sort((a, b) => a - b);
+      const newTimes = this.state.editEvent.times.concat([time]).sort((a, b) => a - b);
+      const newEvent = Object.assign({}, this.state.editEvent, { times: newTimes, coords: newCoords });
+      this.setState({ 
+        events: this.state.events.concat([newEvent]),
+        editEvent: undefined,
+        hoverTime: undefined,
+      });
+    } else {
+      const newEvent = {
+        id: `${this.props.roomId}-event-${new Date().getTime()}`,
+        times: [ time ],
+        coords: [ element.offsetLeft ],
+        width: element.offsetWidth,
+      };
+      this.setState({ editEvent: newEvent });
     }
   }
 
@@ -45,7 +44,7 @@ class Room extends React.Component {
 
   displayHover = (interval) => {
     if (this.state.editEvent) {
-      const times = [this.state.editEvent.startTime, this.state.hoverTime].sort((a, b) => a - b);
+      const times = [this.state.editEvent.times[0], this.state.hoverTime].sort((a, b) => a - b);
       if (interval >= times[0] && interval <= times[1]) {
         return true;
       }
@@ -54,6 +53,25 @@ class Room extends React.Component {
   }
 
   render() {
+    console.log('intervals: ', this.props.intervals.length);
+
+    if (this.props.intervals && this.state.events.length) {
+      let sortedEvents = this.state.events.sort((a, b) => a.times[0] - b.times[0]);
+      let currentEvent = sortedEvents.shift();
+      this.props.intervals.forEach(interval => {
+        if (!currentEvent || interval.value < currentEvent.times[0]) {
+          console.log(`${formatAMPM(interval.value)} alone flex 1`);
+        } else if (interval.value <= currentEvent.times[1]) {
+          if (interval.value === currentEvent.times[0]) {
+            console.log(`${formatAMPM(interval.value)} event, flex ${((currentEvent.times[1] - currentEvent.times[0]) / HALF_HOUR) + 1}`);
+          }
+          if (interval.value === currentEvent.times[1]) {
+            currentEvent = sortedEvents.shift();
+          }
+        }
+      });
+    }
+
     return (
       <div className="timetable-room">
         <div className="timetable-room-label">
@@ -75,7 +93,7 @@ class Room extends React.Component {
               }
             </div>
           ))}
-
+{/*
           <div className="timetable-schedules-room-events">
             {this.state.events.map(event => (
               <Event
@@ -87,7 +105,12 @@ class Room extends React.Component {
               </Event>
             ))}
           </div>
+*/}
         </div>
+{/*
+        <div className="events-wrapper">
+        </div>
+*/}
       </div>
     );
   }

@@ -20,7 +20,8 @@
   background-color: transparent; }
 
 .timetable-room {
-  display: flex; }
+  display: flex;
+  position: relative; }
   .timetable-room .timetable-room-label {
     width: 100px; }
   .timetable-room .timetable-schedules-time-labels {
@@ -39,3 +40,14 @@
   position: absolute;
   left: 0;
   border: 1px solid grey; }
+
+.events-wrapper {
+  position: absolute;
+  left: 100px;
+  right: 0;
+  height: 100%;
+  display: flex; }
+
+.test-event {
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.1); }
