@@ -16,8 +16,9 @@ class Room extends React.Component {
       const newCoords = this.state.editEvent.coords.concat([element.offsetLeft]).sort((a, b) => a - b);
       const newTimes = this.state.editEvent.times.concat([time]).sort((a, b) => a - b);
       const newEvent = Object.assign({}, this.state.editEvent, { times: newTimes, coords: newCoords });
+      console.log('adding a new event to ', this.state.events);
       this.setState({ 
-        events: this.state.events.concat([newEvent]),
+        events: this.state.events.concat([newEvent]).sort((a, b) => a.times[0] - b.times[0]),
         editEvent: undefined,
         hoverTime: undefined,
       });
@@ -53,14 +54,14 @@ class Room extends React.Component {
   }
 
   render() {
-    console.log('intervals: ', this.props.intervals.length);
+    //console.log('intervals: ', this.props.intervals.length);
 
     const eventsDom = [];
 
     if (this.props.intervals && this.state.events.length) {
-      let sortedEvents = this.state.events.sort((a, b) => a.times[0] - b.times[0]);
-      let currentEvent = sortedEvents.shift();
+      let currentEventIndex = 0;
       this.props.intervals.forEach(interval => {
+        let currentEvent = this.state.events[currentEventIndex];
         if (!currentEvent || interval.value < currentEvent.times[0]) {
           eventsDom.push({ className: 'test-event' });
         } else if (interval.value <= currentEvent.times[1]) {
@@ -68,13 +69,13 @@ class Room extends React.Component {
             eventsDom.push({ className: 'test-event active-event', flex: (((currentEvent.times[1] - currentEvent.times[0]) / HALF_HOUR) + 1) });
           }
           if (interval.value === currentEvent.times[1]) {
-            currentEvent = sortedEvents.shift();
+            currentEventIndex++;
           }
         }
       });
     }
 
-    console.log(eventsDom.length);
+    //console.log(eventsDom.length);
 
     return (
       <div className="timetable-room">
@@ -114,7 +115,7 @@ class Room extends React.Component {
 
         <div className="events-wrapper">
           {eventsDom.map(dom => (
-            <div className={dom.className} style={{ flex: dom.flex }} />
+            <div key={`${this.props.roomId}-event-${Math.random()}`} className={dom.className} style={{ flex: dom.flex }} />
           ))}
         </div>
 
