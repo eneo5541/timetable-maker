@@ -1,0 +1,8 @@
+{
+  "short_name": "Timetable maker",
+  "name": "Generate timetables for events",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
