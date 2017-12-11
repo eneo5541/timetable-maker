@@ -55,15 +55,17 @@ class Room extends React.Component {
   render() {
     console.log('intervals: ', this.props.intervals.length);
 
+    const eventsDom = [];
+
     if (this.props.intervals && this.state.events.length) {
       let sortedEvents = this.state.events.sort((a, b) => a.times[0] - b.times[0]);
       let currentEvent = sortedEvents.shift();
       this.props.intervals.forEach(interval => {
         if (!currentEvent || interval.value < currentEvent.times[0]) {
-          console.log(`${formatAMPM(interval.value)} alone flex 1`);
+          eventsDom.push({ className: 'test-event' });
         } else if (interval.value <= currentEvent.times[1]) {
           if (interval.value === currentEvent.times[0]) {
-            console.log(`${formatAMPM(interval.value)} event, flex ${((currentEvent.times[1] - currentEvent.times[0]) / HALF_HOUR) + 1}`);
+            eventsDom.push({ className: 'test-event active-event', flex: (((currentEvent.times[1] - currentEvent.times[0]) / HALF_HOUR) + 1) });
           }
           if (interval.value === currentEvent.times[1]) {
             currentEvent = sortedEvents.shift();
@@ -71,6 +73,8 @@ class Room extends React.Component {
         }
       });
     }
+
+    console.log(eventsDom.length);
 
     return (
       <div className="timetable-room">
@@ -107,10 +111,13 @@ class Room extends React.Component {
           </div>
 */}
         </div>
-{/*
+
         <div className="events-wrapper">
+          {eventsDom.map(dom => (
+            <div className={dom.className} style={{ flex: dom.flex }} />
+          ))}
         </div>
-*/}
+
       </div>
     );
   }
