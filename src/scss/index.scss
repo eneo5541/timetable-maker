@@ -26,6 +26,7 @@
 
 .timetable-room {
   display: flex;
+  position: relative;
 
   .timetable-room-label {
     width: 100px;
@@ -46,8 +47,21 @@
 }
 
 .timetable-schedules-room-event {
-  height: 100%;
-  position: absolute;
-  left: 0;
+  pointer-events: initial;
   border: 1px solid grey;
+}
+
+.timetable-schedules-room-event-wrapper {
+  position: absolute;
+  left: 100px;
+  right: 0;
+  height: 100%;
+  pointer-events: none;
+  display: flex;
+}
+
+.timetable-schedules-room-event-placeholder {
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.1);
+  height: 1px;
 }
