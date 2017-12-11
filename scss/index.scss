@@ -57,15 +57,18 @@
   position: absolute;
   left: 100px;
   right: 0;
-  height: 50%;
+  height: 100%;
+  pointer-events: none;
   display: flex;
 }
 
 .test-event {
   flex: 1;
   background-color: rgba(0, 0, 0, 0.1);
+  height: 1px;
 }
 
 .active-event {
   background-color: orange;
+  height: 100%;
 }
