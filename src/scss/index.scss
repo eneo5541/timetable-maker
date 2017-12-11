@@ -39,8 +39,15 @@
   }
 }
 
+.timetable-time-hover-overlay {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
 .timetable-schedules-room-event {
   height: 100%;
   position: absolute;
   left: 0;
+  border: 1px solid grey;
 }

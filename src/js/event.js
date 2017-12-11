@@ -24,7 +24,7 @@ class Event extends React.Component {
   render() {
     const styles = {
       left: this.props.coords[0],
-      width: this.props.coords[1] - this.props.coords[0],
+      width: this.props.coords[1] - this.props.coords[0] + this.props.width,
       backgroundColor: this.props.color,
     };
 
@@ -43,7 +43,7 @@ class Event extends React.Component {
               ref={(input) => { this.labelInput = input; }}
             />
             <button className="timetable-toggle-button" onClick={this.labelAdded.bind(this)}>
-              &#9989;
+              <span role="img" aria-label="confirm label">&#9989;</span>
             </button>
           </span>
         }
@@ -51,7 +51,7 @@ class Event extends React.Component {
           <span>
             {this.state.label}
             <button className="timetable-toggle-button" onClick={this.eventDeleted}>
-              &#10062;
+              <span role="img" aria-label="delete event">&#10062;</span>
             </button>
           </span>
         }
