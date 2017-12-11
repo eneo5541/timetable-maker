@@ -6,6 +6,12 @@ class Event extends React.Component {
     editLabel: true,
   }
 
+  keyPressed = (key) => {
+    if(key.charCode === 13) {
+      this.labelAdded();
+    }
+  }
+
   labelAdded = () => {
     this.setState({ label: this.labelInput.value || 'Generic event', editLabel: false });
   }
@@ -41,6 +47,7 @@ class Event extends React.Component {
               type="text"
               defaultValue={this.state.label}
               ref={(input) => { this.labelInput = input; }}
+              onKeyPress={this.keyPressed.bind(this)}
             />
             <button className="timetable-toggle-button" onClick={this.labelAdded.bind(this)}>
               <span role="img" aria-label="confirm label">&#9989;</span>
