@@ -29,12 +29,9 @@ class Event extends React.Component {
 
   render() {
     const styles = {
-      left: this.props.coords[0],
-      width: this.props.coords[1] - this.props.coords[0] + this.props.width,
       backgroundColor: this.props.color,
+      flex: this.props.size,
     };
-
-    console.log(this.props.startInterval);
 
     return (
       <div

@@ -47,13 +47,11 @@
 }
 
 .timetable-schedules-room-event {
-  height: 100%;
-  position: absolute;
-  left: 0;
+  pointer-events: initial;
   border: 1px solid grey;
 }
 
-.events-wrapper {
+.timetable-schedules-room-event-wrapper {
   position: absolute;
   left: 100px;
   right: 0;
@@ -62,13 +60,8 @@
   display: flex;
 }
 
-.test-event {
+.timetable-schedules-room-event-placeholder {
   flex: 1;
   background-color: rgba(0, 0, 0, 0.1);
   height: 1px;
-}
-
-.active-event {
-  background-color: orange;
-  height: 100%;
 }
