@@ -1,2 +1,35 @@
 .timetable-time-dropdown {
   width: 200px; }
+
+.timetable-schedules {
+  width: 100%;
+  background-color: silver;
+  margin-top: 15px; }
+
+.timetable-schedules-time-labels {
+  display: flex;
+  margin-left: 100px; }
+
+.timetable-time {
+  flex: 1;
+  border: 1px solid grey;
+  min-height: 25px; }
+
+.timetable-toggle-button {
+  border: 0;
+  background-color: transparent; }
+
+.timetable-room {
+  display: flex; }
+  .timetable-room .timetable-room-label {
+    width: 100px; }
+  .timetable-room .timetable-schedules-time-labels {
+    margin-left: 0;
+    width: 100%;
+    flex: 1;
+    position: relative; }
+
+.timetable-schedules-room-event {
+  height: 100%;
+  position: absolute;
+  left: 0; }
