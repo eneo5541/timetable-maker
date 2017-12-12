@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Room from './room';
 import { generateHalfHourIntervals } from './timeUtils';
 
@@ -52,6 +53,17 @@ class Schedules extends React.Component {
       </div>
     );
   }
+}
+
+Schedules.propTypes = {
+  startTime: PropTypes.number.isRequired,
+  finishTime: PropTypes.number.isRequired,
+  rooms: PropTypes.arrayOf(PropTypes.object).isRequired,
+  roomDeleted: PropTypes.func,
+};
+
+Schedules.defaultProps = {
+  roomDeleted: () => {},
 }
 
 export default Schedules;

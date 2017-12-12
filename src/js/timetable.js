@@ -5,6 +5,7 @@ import { BASE_TIME, HALF_HOUR, generateHalfHourIntervals } from './timeUtils';
 
 class Timetable extends React.Component {
   state = {
+    tableTitle: undefined,
     startTime: BASE_TIME + (HALF_HOUR * 18),
     finishTime: BASE_TIME + (HALF_HOUR * 42),
     rooms: [{
@@ -17,6 +18,16 @@ class Timetable extends React.Component {
       id: 'room-10111',
       label: 'main stages',
     }],
+  }
+
+  keyPressed = (key) => {
+    if(key.charCode === 13) {
+      this.setState({ tableTitle: this.titleInput.value });
+    }
+  }
+
+  editTitle = () => {
+    this.setState({ tableTitle: undefined });
   }
 
   startTimeChanged = (event) => {
@@ -50,6 +61,20 @@ class Timetable extends React.Component {
     return (
       <div className="timetable">
         <div className="timetable-controls">
+          {this.state.tableTitle && 
+            <div className="timetable-title" onClick={this.editTitle}>
+              {this.state.tableTitle}
+            </div>
+          }
+          {!this.state.tableTitle && 
+            <input 
+              id="tableTitle"
+              type="text"
+              placeholder="Name of schedule"
+              onKeyPress={this.keyPressed.bind(this)}
+              ref={(input) => { this.titleInput = input; }}
+            />
+          }
           Set start time:
           <Select
             className="timetable-time-dropdown"

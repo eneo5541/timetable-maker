@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Event from './event';
 import { HALF_HOUR } from './timeUtils';
 
@@ -19,7 +20,6 @@ class EventContainer extends React.Component {
                 color={this.props.hexColor}
                 eventDeleted={this.props.eventDeleted.bind(this)}
                 size={((currentEvent.times[1] - currentEvent.times[0]) / HALF_HOUR) + 1}
-                editLabel={true}
                 {...currentEvent}
               />
             );
@@ -41,6 +41,18 @@ class EventContainer extends React.Component {
       </div>
     );
   }
+}
+
+EventContainer.propTypes = {
+  hexColor: PropTypes.string,
+  intervals: PropTypes.arrayOf(PropTypes.object).isRequired,
+  events: PropTypes.arrayOf(PropTypes.object).isRequired,
+  eventDeleted: PropTypes.func,
+};
+
+EventContainer.defaultProps = {
+  hexColor: '#99ff00',
+  eventDeleted: () => {},
 }
 
 export default EventContainer;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Event extends React.Component {
   state = {
@@ -70,6 +71,22 @@ class Event extends React.Component {
       </div>
     );
   }
+}
+
+Event.propTypes = {
+  label: PropTypes.string,
+  editLabel: PropTypes.bool,
+  color: PropTypes.string,
+  size: PropTypes.number,
+  eventDeleted: PropTypes.func,
+};
+
+Event.defaultProps = {
+  label: undefined,
+  editLabel: true,
+  color: '#99ff00',
+  size: 1,
+  eventDeleted: () => {},
 }
 
 export default Event;
