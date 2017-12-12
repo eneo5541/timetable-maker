@@ -2,13 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import EventContainer from './event-container';
 import Timeslot from './timeslot';
+import SettableInput from './settable-input';
 
 class Room extends React.Component {
   state = {
-    events: [],
     editEvent: undefined,
-    selectedsTime: undefined,
+    selectedTime: undefined,
     hexColor: '#'+Math.floor(Math.random()*16777215).toString(16),
+  }
+
+  setLabel = (label) => {
+    this.setState({ label });
   }
 
   updateEvents = (events) => {
@@ -87,7 +91,13 @@ class Room extends React.Component {
     return (
       <div className="timetable-room">
         <div className="timetable-room-label">
-          {this.props.label}
+          <SettableInput
+            className="test-class"
+            placeholder="Name of schedule"
+            value={this.props.label}
+            updateValue={this.setLabel}
+          />
+
           <button className="timetable-toggle-button" onClick={() => this.props.roomDeleted(this.props)}>
             <span role="img" aria-label="delete room">&#10062;</span>
           </button>
@@ -120,7 +130,7 @@ class Room extends React.Component {
 
 Room.propTypes = {
   roomId: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   events: PropTypes.arrayOf(PropTypes.object).isRequired,
   intervals: PropTypes.arrayOf(PropTypes.object).isRequired,
   updateEvents: PropTypes.func,
@@ -128,6 +138,7 @@ Room.propTypes = {
 };
 
 Timeslot.defaultProps = {
+  label: undefined,
   updateEvents: () => {},
   roomDeleted: () => {},
 }
