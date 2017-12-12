@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import Schedules from './schedules';
+import SettableInput from './settable-input';
 import { BASE_TIME, HALF_HOUR, generateHalfHourIntervals } from './timeUtils';
 
 class Timetable extends React.Component {
@@ -20,12 +21,6 @@ class Timetable extends React.Component {
     }],
   }
 
-  keyPressed = (key) => {
-    if(key.charCode === 13) {
-      this.setState({ tableTitle: this.titleInput.value });
-    }
-  }
-
   editTitle = () => {
     this.setState({ tableTitle: undefined });
   }
@@ -43,12 +38,8 @@ class Timetable extends React.Component {
   }
 
   roomAdded = () => {
-    const newRoom = {
-      id: `room-${new Date().getTime()}`,
-      label: this.newRoomInput.value,
-    };
+    const newRoom = { id: `room-${new Date().getTime()}` };
     this.setState({ rooms: this.state.rooms.concat([newRoom]) });
-    this.newRoomInput.value = "";
   }  
 
   roomDeleted = (newRoom) => {
@@ -61,20 +52,7 @@ class Timetable extends React.Component {
     return (
       <div className="timetable">
         <div className="timetable-controls">
-          {this.state.tableTitle && 
-            <div className="timetable-title" onClick={this.editTitle}>
-              {this.state.tableTitle}
-            </div>
-          }
-          {!this.state.tableTitle && 
-            <input 
-              id="tableTitle"
-              type="text"
-              placeholder="Name of schedule"
-              onKeyPress={this.keyPressed.bind(this)}
-              ref={(input) => { this.titleInput = input; }}
-            />
-          }
+          <SettableInput className="test-class" placeholder="Name of schedule" />
           Set start time:
           <Select
             className="timetable-time-dropdown"
@@ -89,14 +67,13 @@ class Timetable extends React.Component {
             onChange={this.finishTimeChanged.bind(this)}
             options={finishTimes}
           />
-          <input id="roomName" type="text" ref={(input) => { this.newRoomInput = input; }} />
-          <button onClick={this.roomAdded.bind(this)}>Add room</button>
         </div>
         <Schedules
           startTime={this.state.startTime}
           finishTime={this.state.finishTime}
           rooms={this.state.rooms}
           roomDeleted={this.roomDeleted.bind(this)}
+          roomAdded={this.roomAdded.bind(this)}
         />
       </div>
     );

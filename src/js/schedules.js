@@ -26,6 +26,19 @@ class Schedules extends React.Component {
     this.setState({ events });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.rooms !== this.props.rooms) {
+      const events = this.state.events;
+      nextProps.rooms.forEach(newRoom => {
+        const roomExists = Object.keys(this.state.events).find(key => key === newRoom.id);
+        if (!roomExists) {
+          events[newRoom.id] = [];
+        }
+      });
+      this.setState({ events });
+    }
+  }
+
   render() {
     const intervals = generateHalfHourIntervals(this.props.startTime, this.props.finishTime);
     return (
@@ -49,6 +62,11 @@ class Schedules extends React.Component {
               {...room}
             />
           ))}
+          <div className="timetable-schedules-add-room">
+            <button onClick={this.props.roomAdded}>
+              <span role="img" aria-label="add room">&#10010;</span>
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -60,10 +78,12 @@ Schedules.propTypes = {
   finishTime: PropTypes.number.isRequired,
   rooms: PropTypes.arrayOf(PropTypes.object).isRequired,
   roomDeleted: PropTypes.func,
+  roomAdded: PropTypes.func,
 };
 
 Schedules.defaultProps = {
   roomDeleted: () => {},
+  roomAdded: () => {},
 }
 
 export default Schedules;
