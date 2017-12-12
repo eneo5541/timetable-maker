@@ -1,36 +1,68 @@
-.timetable-time-dropdown {
-  width: 200px;
+$light-grey: #e5e5e5;
+$mid-grey: #cecece;
+$dark-grey: #b2b2b2;
+$text-color: #3d3d3d;
+$room-label-width: 150px;
+
+body {
+  color: $text-color;
+  margin: 0;
+  background-color: $light-grey;
+  font-family: Arial;
+}
+input[type=text] {
+  padding: 0;
+  height: 100%;
+  border: 0;
+}
+
+.timetable-controls {
+  padding: 20px;
+  background-color: $mid-grey;
+  border-bottom: 3px $dark-grey solid;
+
+  .timetable-title {
+    height: 35px;
+    font-size: 28px;
+    margin-bottom: 15px;
+
+    input[type=text] {
+      width: 500px;
+      font-size: 20px;
+    }
+  }
+}
+
+.timetable-time-selections {
+  display: flex;
+
+  .timetable-time-dropdown {
+    width: 200px;
+    margin-right: 20px;
+  }
 }
 
 .timetable-schedules {
-  width: 100%;
-  background-color: silver;
-  margin-top: 15px;
+  margin: 20px;
 }
 
 .timetable-schedules-time-labels {
   display: flex;
-  margin-left: 100px;
+  margin-left: $room-label-width + 2;
 }
 
 .timetable-time {
   flex: 1;
-  border: 1px solid grey;
-  min-height: 25px;
-}
-
-.timetable-toggle-button {
-  border: 0;
-  background-color: transparent;
+  border: 1px solid $dark-grey;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .timetable-room {
   display: flex;
   position: relative;
-
-  .timetable-room-label {
-    width: 100px;
-  }
 
   .timetable-schedules-time-labels {
     margin-left: 0;
@@ -40,20 +72,60 @@
   }
 }
 
+.timetable-room-label {
+  display: flex;
+  width: $room-label-width;
+  border: 1px solid $dark-grey;
+  align-items: center;
+  justify-content: center;
+
+  .timetable-room-input-label {
+    flex: 1;
+    margin-left: 5px;
+
+    input[type=text] {
+      width: 120px;
+      height: 22px;
+    }
+  }
+}
+
+.timetable-toggle-button {
+  margin-right: 5px;
+}
+
+.timetable-schedules-add-room {
+  min-height: 30px;
+  display: flex;
+}
+
 .timetable-time-hover-overlay {
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba($dark-grey, 0.5);
 }
 
-.timetable-schedules-room-event {
+.timetable-schedules-room-event-active {
   pointer-events: initial;
-  border: 1px solid grey;
+  border: 1px solid $dark-grey;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .timetable-schedules-room-event-input-label {
+    flex: 1;
+    margin-left: 5px;
+
+    input[type=text] {
+      width: calc(100% - 5px);
+      height: 22px;
+    }
+  }
 }
 
 .timetable-schedules-room-event-wrapper {
   position: absolute;
-  left: 100px;
+  left: $room-label-width;
   right: 0;
   height: 100%;
   pointer-events: none;
