@@ -63,9 +63,12 @@ class Schedules extends React.Component {
             />
           ))}
           <div className="timetable-schedules-add-room">
-            <button onClick={this.props.roomAdded}>
-              <span role="img" aria-label="add room">&#10010;</span>
-            </button>
+            <div className="timetable-room-label">
+              <button onClick={this.props.roomAdded}>
+                <span role="img" aria-label="add room">&#10010;</span>
+              </button>
+            </div>
+            <div className="timetable-time" />
           </div>
         </div>
       </div>

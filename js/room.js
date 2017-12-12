@@ -6,6 +6,7 @@ import SettableInput from './settable-input';
 
 class Room extends React.Component {
   state = {
+    label: this.props.label,
     editEvent: undefined,
     selectedTime: undefined,
     hexColor: '#'+Math.floor(Math.random()*16777215).toString(16),
@@ -92,15 +93,17 @@ class Room extends React.Component {
       <div className="timetable-room">
         <div className="timetable-room-label">
           <SettableInput
-            className="test-class"
-            placeholder="Name of schedule"
+            className="timetable-room-input-label"
+            placeholder="Name of room"
             value={this.props.label}
             updateValue={this.setLabel}
           />
 
-          <button className="timetable-toggle-button" onClick={() => this.props.roomDeleted(this.props)}>
-            <span role="img" aria-label="delete room">&#10062;</span>
-          </button>
+          <span>
+            <button className="timetable-toggle-button" onClick={() => this.props.roomDeleted(this.props)}>
+              <span role="img" aria-label="delete room">&#10006;</span>
+            </button>
+          </span>
         </div>
 
         <div className="timetable-schedules-time-labels">

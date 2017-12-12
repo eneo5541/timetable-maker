@@ -12,12 +12,6 @@ class Timetable extends React.Component {
     rooms: [{
       id: 'room-12345',
       label: 'the room',
-    }, {
-      id: 'room-67890',
-      label: 'conference room 1',
-    }, {
-      id: 'room-10111',
-      label: 'main stages',
     }],
   }
 
@@ -52,21 +46,21 @@ class Timetable extends React.Component {
     return (
       <div className="timetable">
         <div className="timetable-controls">
-          <SettableInput className="test-class" placeholder="Name of schedule" />
-          Set start time:
-          <Select
-            className="timetable-time-dropdown"
-            value={this.state.startTime}
-            onChange={this.startTimeChanged.bind(this)}
-            options={startTimes}
-          />
-          Set finish time:
-          <Select
-            className="timetable-time-dropdown"
-            value={this.state.finishTime}
-            onChange={this.finishTimeChanged.bind(this)}
-            options={finishTimes}
-          />
+          <SettableInput className="timetable-title" placeholder="Name of schedule" />
+          <div className="timetable-time-selections">
+            <Select
+              className="timetable-time-dropdown"
+              value={this.state.startTime}
+              onChange={this.startTimeChanged.bind(this)}
+              options={startTimes}
+            />
+            <Select
+              className="timetable-time-dropdown"
+              value={this.state.finishTime}
+              onChange={this.finishTimeChanged.bind(this)}
+              options={finishTimes}
+            />
+          </div>
         </div>
         <Schedules
           startTime={this.state.startTime}

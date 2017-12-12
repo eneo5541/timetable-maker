@@ -1,31 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import SettableInput from './settable-input';
 
 class Event extends React.Component {
   state = {
     label: this.props.label,
-    editLabel: this.props.editLabel,
   }
 
-  keyPressed = (key) => {
-    if(key.charCode === 13) {
-      this.labelAdded();
-    }
-  }
-
-  labelAdded = () => {
-    this.setState({ label: this.labelInput.value || 'Generic event', editLabel: false });
-  }
-
-  editLabel = () => {
-    if(!this.state.editLabel) {
-      this.setState({ editLabel: true });
-    }
-  }
-
-  eventDeleted = (event) => {
-    event.stopPropagation();
-    this.props.eventDeleted(this.props.id);
+  setLabel = (label) => {
+    this.setState({ label });
   }
 
   drag = (event) => {
@@ -40,34 +23,23 @@ class Event extends React.Component {
 
     return (
       <div
-        className="timetable-schedules-room-event"
+        className="timetable-schedules-room-event-active"
         style={styles}
-        onClick={this.editLabel.bind(this)}
         onDragStart={this.drag}
         draggable
       >
-        {this.state.editLabel &&
-          <span>
-            <input
-              id="roomName"
-              type="text"
-              defaultValue={this.state.label}
-              ref={(input) => { this.labelInput = input; }}
-              onKeyPress={this.keyPressed.bind(this)}
-            />
-            <button className="timetable-toggle-button" onClick={this.labelAdded.bind(this)}>
-              <span role="img" aria-label="confirm label">&#9989;</span>
-            </button>
-          </span>
-        }
-        {!this.state.editLabel &&
-          <span>
-            {this.state.label}
-            <button className="timetable-toggle-button" onClick={this.eventDeleted}>
-              <span role="img" aria-label="delete event">&#10062;</span>
-            </button>
-          </span>
-        }
+        <SettableInput
+          className="timetable-schedules-room-event-input-label"
+          placeholder="Event name"
+          value={this.state.label}
+          updateValue={this.setLabel}
+        />
+
+        <span>
+          <button className="timetable-toggle-button" onClick={() => this.props.eventDeleted(this.props.id)}>
+            <span role="img" aria-label="delete event">&#10006;</span>
+          </button>
+        </span>
       </div>
     );
   }
