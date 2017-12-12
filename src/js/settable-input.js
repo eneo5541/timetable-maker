@@ -53,5 +53,4 @@ SettableInput.defaultProps = {
   placeholder: undefined,
 }
 
-
 export default SettableInput;

@@ -13,16 +13,13 @@ class Schedules extends React.Component {
 
   updateEvents = (newEvents, roomId) => {
     const events = this.state.events;
-
     newEvents.forEach(newEvent => {
       if (newEvent.roomId !== roomId) {
         events[newEvent.roomId] = events[newEvent.roomId].filter(event => event.id !== newEvent.id);
         newEvent.roomId = roomId;
       }
     });
-    
     events[roomId] = newEvents;
-
     this.setState({ events });
   }
 
