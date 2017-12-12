@@ -2,14 +2,15 @@
   "name": "timetable",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://eneo5541.github.io/timetable-maker",
   "dependencies": {
+    "classnames": "2.2.5",
     "node-sass-chokidar": "^0.0.3",
     "prop-types": "15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "1.0.17",
-    "react-select": "1.1.0",
-    "classnames": "2.2.5"
+    "react-select": "1.1.0"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
@@ -17,9 +18,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
+    "gh-pages": "^1.1.0",
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.6"
   }

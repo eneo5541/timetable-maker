@@ -9,10 +9,7 @@ class Timetable extends React.Component {
     tableTitle: undefined,
     startTime: BASE_TIME + (HALF_HOUR * 18),
     finishTime: BASE_TIME + (HALF_HOUR * 42),
-    rooms: [{
-      id: 'room-12345',
-      label: 'the room',
-    }],
+    rooms: [],
   }
 
   editTitle = () => {
