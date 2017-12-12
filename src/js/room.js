@@ -1,58 +1,33 @@
 import React from 'react';
-import Event from './event';
+import EventContainer from './event-container';
 import Timeslot from './timeslot';
-import { HALF_HOUR } from './timeUtils';
 
 class Room extends React.Component {
   state = {
     events: [],
     editEvent: undefined,
-    hoverTime: undefined,
+    selectedsTime: undefined,
     hexColor: '#'+Math.floor(Math.random()*16777215).toString(16),
   }
 
-  getEventElements = (intervals, events) => {
-    let eventElements = [];
-    if (intervals && events.length) {
-      let currentEventIndex = 0;
-      intervals.forEach(interval => {
-        let currentEvent = events[currentEventIndex];
-        if (!currentEvent || interval.value < currentEvent.times[0]) {
-          eventElements.push(<div key={Math.random()} className="timetable-schedules-room-event-placeholder" />);
-        } else if (interval.value <= currentEvent.times[1]) {
-          if (interval.value === currentEvent.times[0]) {
-            eventElements.push(
-              <Event
-                key={currentEvent.id}
-                color={this.state.hexColor}
-                eventDeleted={this.eventDeleted.bind(this)}
-                size={((currentEvent.times[1] - currentEvent.times[0]) / HALF_HOUR) + 1}
-                {...currentEvent}
-              />
-            );
-          }
-          if (interval.value === currentEvent.times[1]) {
-            currentEventIndex++;
-          }
-        }
-      });
-    }
-
-    return eventElements;
+  updateEvents = (events) => {
+    const sortedEvents = events.sort((a, b) => a.times[0] - b.times[0])
+    this.props.updateEvents(sortedEvents, this.props.roomId);
   }
 
-  toggleEvent = (event, time) => {
+  createEvent = (event, time) => {
     if (this.state.editEvent) {
       const newTimes = this.state.editEvent.times.concat([time]).sort((a, b) => a - b);
       const newEvent = Object.assign({}, this.state.editEvent, { times: newTimes });
       this.setState({ 
-        events: this.state.events.concat([newEvent]).sort((a, b) => a.times[0] - b.times[0]),
         editEvent: undefined,
-        hoverTime: undefined,
+        selectedTime: undefined,
       });
+      this.updateEvents(this.props.events.concat([newEvent]));
     } else {
       const newEvent = {
         id: `${this.props.roomId}-event-${new Date().getTime()}`,
+        roomId: this.props.roomId,
         times: [ time ],
       };
       this.setState({ editEvent: newEvent });
@@ -60,18 +35,18 @@ class Room extends React.Component {
   }
 
   eventDeleted = (eventId) => {
-    this.setState({ events: this.state.events.filter(event => event.id !== eventId) });
+    this.updateEvents(this.props.events.filter(event => event.id !== eventId));
   }
 
-  mouseOverHandler = (interval) => {
+  setSelectedTime = (interval) => {
     if (this.state.editEvent) {
-      this.setState({ hoverTime: interval });
+      this.setState({ selectedTime: interval });
     }
   }
 
-  displayHover = (interval) => {
+  highlightSelectedTimes = (interval) => {
     if (this.state.editEvent) {
-      const times = [this.state.editEvent.times[0], this.state.hoverTime].sort((a, b) => a - b);
+      const times = [this.state.editEvent.times[0], this.state.selectedTime].sort((a, b) => a - b);
       if (interval >= times[0] && interval <= times[1]) {
         return true;
       }
@@ -79,10 +54,10 @@ class Room extends React.Component {
     return false;
   }
 
-  eventsChanged = (newEvent, newTime) => {
+  changeEventTimes = (newEvent, newTime) => {
     const timeDifference = newTime - newEvent.times[0];
     const newTimes = newEvent.times.map(time => time += timeDifference);
-    const timeConflicts = this.state.events
+    const timeConflicts = this.props.events
       .filter(event => event.id !== newEvent.id)
       .reduce((conflict, event) => {
         if (conflict ||
@@ -95,9 +70,15 @@ class Room extends React.Component {
     );
 
     if (!timeConflicts) {
-      const existingEvent = this.state.events.find(event => event.id === newEvent.id);
-      existingEvent.times = newTimes;
-      this.setState({ events: this.state.events.sort((a, b) => a.times[0] - b.times[0]) });
+      let existingEvent = this.props.events.find(event => event.id === newEvent.id)
+      if (existingEvent) {
+        existingEvent.times = newTimes;
+        this.updateEvents(this.props.events);
+      } else {
+        newEvent.times = newTimes;
+        newEvent.color = this.state.hexColor;
+        this.updateEvents(this.props.events.concat([newEvent]));
+      }
     }
   }
 
@@ -105,8 +86,8 @@ class Room extends React.Component {
     return (
       <div className="timetable-room">
         <div className="timetable-room-label">
-          {this.props.room.label}
-          <button className="timetable-toggle-button" onClick={() => this.props.roomDeleted(this.props.room)}>
+          {this.props.label}
+          <button className="timetable-toggle-button" onClick={() => this.props.roomDeleted(this.props)}>
             <span role="img" aria-label="delete room">&#10062;</span>
           </button>
         </div>
@@ -115,18 +96,21 @@ class Room extends React.Component {
           {this.props.intervals.map(interval => (
             <Timeslot
               key={interval.value}
-              handleClick={this.toggleEvent}
-              handleMouseOver={this.mouseOverHandler}
-              isHovering={this.displayHover(interval.value)}
-              moveEvent={this.eventsChanged}
+              handleClick={this.createEvent}
+              handleMouseOver={this.setSelectedTime}
+              isHovering={this.highlightSelectedTimes(interval.value)}
+              moveEvent={this.changeEventTimes}
               {...interval}
             />
           ))}
         </div>
 
-        <div className="timetable-schedules-room-event-wrapper">
-          {this.getEventElements(this.props.intervals, this.state.events)}
-        </div>
+        <EventContainer 
+          intervals={this.props.intervals}
+          events={this.props.events}
+          hexColor={this.state.hexColor}
+          eventDeleted={this.eventDeleted}
+        />
 
       </div>
     );

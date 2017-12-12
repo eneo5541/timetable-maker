@@ -10,6 +10,12 @@ class Timetable extends React.Component {
     rooms: [{
       id: 'room-12345',
       label: 'the room',
+    }, {
+      id: 'room-67890',
+      label: 'conference room 1',
+    }, {
+      id: 'room-10111',
+      label: 'main stages',
     }],
   }
 
