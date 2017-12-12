@@ -3,7 +3,7 @@ import React from 'react';
 class Event extends React.Component {
   state = {
     label: this.props.label,
-    editLabel: true,
+    editLabel: this.props.editLabel,
   }
 
   keyPressed = (key) => {
