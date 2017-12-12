@@ -1,5 +1,6 @@
 import React from 'react';
 import Event from './event';
+import Timeslot from './timeslot';
 import { HALF_HOUR } from './timeUtils';
 
 class Room extends React.Component {
@@ -78,6 +79,28 @@ class Room extends React.Component {
     return false;
   }
 
+  eventsChanged = (newEvent, newTime) => {
+    const timeDifference = newTime - newEvent.times[0];
+    const newTimes = newEvent.times.map(time => time += timeDifference);
+    const timeConflicts = this.state.events
+      .filter(event => event.id !== newEvent.id)
+      .reduce((conflict, event) => {
+        if (conflict ||
+          (newTimes[0] >= event.times[0] && newTimes[0] <= event.times[1]) ||
+          (newTimes[1] >= event.times[0] && newTimes[1] <= event.times[1])) {
+          return true;
+        }
+        return false;
+      }, false
+    );
+
+    if (!timeConflicts) {
+      const existingEvent = this.state.events.find(event => event.id === newEvent.id);
+      existingEvent.times = newTimes;
+      this.setState({ events: this.state.events.sort((a, b) => a.times[0] - b.times[0]) });
+    }
+  }
+
   render() {
     return (
       <div className="timetable-room">
@@ -90,16 +113,14 @@ class Room extends React.Component {
 
         <div className="timetable-schedules-time-labels">
           {this.props.intervals.map(interval => (
-            <div
+            <Timeslot
               key={interval.value}
-              className={`timetable-time`}
-              onClick={(event) => this.toggleEvent(event, interval.value)}
-              onMouseOver={() => this.mouseOverHandler(interval.value)}
-            >
-              {this.displayHover(interval.value) && 
-                <div className="timetable-time-hover-overlay" />
-              }
-            </div>
+              handleClick={this.toggleEvent}
+              handleMouseOver={this.mouseOverHandler}
+              isHovering={this.displayHover(interval.value)}
+              moveEvent={this.eventsChanged}
+              {...interval}
+            />
           ))}
         </div>
 
