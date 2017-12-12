@@ -2,7 +2,7 @@ import React from 'react';
 
 class Event extends React.Component {
   state = {
-    label: undefined,
+    label: this.props.label,
     editLabel: true,
   }
 
@@ -27,6 +27,10 @@ class Event extends React.Component {
     this.props.eventDeleted(this.props.id);
   }
 
+  drag = (event) => {
+    event.dataTransfer.setData("text", JSON.stringify(Object.assign({}, this.props, this.state)));
+  }
+
   render() {
     const styles = {
       backgroundColor: this.props.color,
@@ -38,6 +42,8 @@ class Event extends React.Component {
         className="timetable-schedules-room-event"
         style={styles}
         onClick={this.editLabel.bind(this)}
+        onDragStart={this.drag}
+        draggable
       >
         {this.state.editLabel &&
           <span>
