@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Timeslot extends React.Component {
   allowDrag = (event) => {
@@ -20,12 +21,25 @@ class Timeslot extends React.Component {
         onDragOver={this.allowDrag}
         onDrop={this.onDrop}
       >
-        {(this.props.isHovering) && 
+        {(this.props.isSelected) && 
           <div className="timetable-time-hover-overlay" />
         }
       </div>
     );
   }
+}
+
+Timeslot.propTypes = {
+  value: PropTypes.number.isRequired,
+  isSelected: PropTypes.bool,
+  handleClick: PropTypes.func,
+  handleMouseOver: PropTypes.func,
+};
+
+Timeslot.defaultProps = {
+  isSelected: false,
+  handleClick: () => {},
+  handleMouseOver: () => {},
 }
 
 export default Timeslot;

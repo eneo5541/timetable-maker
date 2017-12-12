@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import EventContainer from './event-container';
 import Timeslot from './timeslot';
 
@@ -98,7 +99,7 @@ class Room extends React.Component {
               key={interval.value}
               handleClick={this.createEvent}
               handleMouseOver={this.setSelectedTime}
-              isHovering={this.highlightSelectedTimes(interval.value)}
+              isSelected={this.highlightSelectedTimes(interval.value)}
               moveEvent={this.changeEventTimes}
               {...interval}
             />
@@ -116,5 +117,20 @@ class Room extends React.Component {
     );
   }
 }
+
+Room.propTypes = {
+  roomId: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  events: PropTypes.arrayOf(PropTypes.object).isRequired,
+  intervals: PropTypes.arrayOf(PropTypes.object).isRequired,
+  updateEvents: PropTypes.func,
+  roomDeleted: PropTypes.func,
+};
+
+Timeslot.defaultProps = {
+  updateEvents: () => {},
+  roomDeleted: () => {},
+}
+
 
 export default Room;
