@@ -9,7 +9,7 @@ class Room extends React.Component {
     label: this.props.label,
     editEvent: undefined,
     selectedTime: undefined,
-    hexColor: '#'+Math.floor(Math.random()*16777215).toString(16),
+    hexColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
   }
 
   setLabel = (label) => {
@@ -98,7 +98,6 @@ class Room extends React.Component {
             value={this.props.label}
             updateValue={this.setLabel}
           />
-
           <span>
             <button className="timetable-toggle-button" onClick={() => this.props.roomDeleted(this.props)}>
               <span role="img" aria-label="delete room">&#10006;</span>
@@ -118,14 +117,12 @@ class Room extends React.Component {
             />
           ))}
         </div>
-
         <EventContainer 
           intervals={this.props.intervals}
           events={this.props.events}
           hexColor={this.state.hexColor}
           eventDeleted={this.eventDeleted}
         />
-
       </div>
     );
   }
